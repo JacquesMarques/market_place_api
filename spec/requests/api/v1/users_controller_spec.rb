@@ -37,5 +37,11 @@ RSpec.describe Api::V1::UsersController, type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
+    it 'should destroy user' do
+      delete api_v1_user_url(user), as: :json
+
+      expect(response).to have_http_status(:no_content)
+      expect { user }.to change(User, :count).by(0)
+    end
   end
 end

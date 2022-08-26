@@ -26,22 +26,42 @@ RSpec.describe Api::V1::UsersController, type: :request do
     end
 
     it 'should update user' do
-      patch api_v1_user_url(user), params: { user: { email: user.email, password: '123456' } }, as: :json
+      patch api_v1_user_url(user),
+            params: { user: { email: user.email, password: '123456' } },
+            headers: { Authorization: JsonWebToken.encode(user_id: user.id) },
+            as: :json
 
       expect(response).to have_http_status(:success)
     end
 
+    it 'should forbid update user' do
+      patch api_v1_user_url(user), params: { user: { email: user.email } }, as: :json
+
+      expect(response).to have_http_status(:forbidden)
+    end
+
     it 'should not update user when invalid params are sent' do
-      patch api_v1_user_url(user), params: { user: { email: 'bad_email', password: '123456' } }, as: :json
+      patch api_v1_user_url(user),
+            params: { user: { email: 'bad_email', password: '123456' } },
+            headers: { Authorization: JsonWebToken.encode(user_id: user.id) },
+            as: :json
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
     it 'should destroy user' do
-      delete api_v1_user_url(user), as: :json
+      delete api_v1_user_url(user),
+             headers: { Authorization: JsonWebToken.encode(user_id: user.id) },
+             as: :json
 
       expect(response).to have_http_status(:no_content)
       expect { user }.to change(User, :count).by(0)
+    end
+
+    it 'should forbid destroy user' do
+      delete api_v1_user_url(user), as: :json
+
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

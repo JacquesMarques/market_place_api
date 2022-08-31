@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let(:user) { create(:user) }
+  let(:product) { create(:product, { user: user }) }
 
   it 'is valid with valid attributes' do
     expect(user).to be_valid
@@ -17,4 +18,9 @@ RSpec.describe User, type: :model do
     expect(other_user).to_not be_valid
   end
 
+  it 'destroy user should destroy linked product' do
+    expect do
+      user.destroy
+    end.to change{Product.count}.by(0)
+  end
 end

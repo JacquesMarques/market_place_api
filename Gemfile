@@ -38,6 +38,7 @@ gem 'bootsnap', require: false
 
 # bcrypt() is a sophisticated and secure hash algorithm
 gem 'bcrypt', '~> 3.1', '>= 3.1.18'
+gem 'fast_jsonapi', '~> 1.5'
 gem 'jwt', '~> 2.5'
 
 group :development, :test do

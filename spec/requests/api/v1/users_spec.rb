@@ -10,7 +10,7 @@ RSpec.describe Api::V1::UsersController, type: :request do
 
       expect(response.status).to eq(200)
       json_response = JSON.parse(self.response.body)
-      expect(user.email).to eq(json_response['email'])
+      expect(user.email).to eq(json_response['data']['attributes']['email'])
     end
 
     it 'should create user' do

@@ -12,9 +12,12 @@ RSpec.describe 'Api::V1::Products', type: :request do
   it 'should show product' do
     get api_v1_product_url(product), as: :json
 
-    expect(response.status).to eq(200)
-    json_response = JSON.parse(self.response.body)
-    expect(product.title).to eq(json_response['data']['attributes']['title'])
+    expect(response).to have_http_status(:success)
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+    expect(product.title).to eq(json_response.dig(:data, :attributes, :title))
+    expect(product.user.id.to_s).to eq(json_response.dig(:data, :relationships, :user, :data, :id))
+    expect(product.user.email).to eq(json_response.dig(:included, 0, :attributes, :email))
   end
 
   it 'should create product' do

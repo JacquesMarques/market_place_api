@@ -14,7 +14,7 @@ RSpec.describe 'Api::V1::Products', type: :request do
 
     expect(response.status).to eq(200)
     json_response = JSON.parse(self.response.body)
-    expect(product.title).to eq(json_response['title'])
+    expect(product.title).to eq(json_response['data']['attributes']['title'])
   end
 
   it 'should create product' do
